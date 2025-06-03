@@ -4,7 +4,7 @@ const password = 'iot';
 const topicToSubscribe = 'banjir/level_air';
 const webClientId = 'IOT_BANJIR_TRACKER_WEB'
 
-const priceElement = document.getElementById('btcPrice');
+const levelAir = document.getElementById('btcPrice');
 const changeElement = document.getElementById('btcChange');
 const updatedElement = document.getElementById('lastUpdated');
 const mqttStatusElement = document.getElementById('mqttStatus');
@@ -45,7 +45,7 @@ client.on('message', function (topic, message) {
   try {
     const data = JSON.parse(messageString);
     if (data.price && data.change24hr) {
-      priceElement.textContent = '$' + data.price;
+      levelAir.textContent = data.price;
       changeElement.textContent = data.change24hr;
 
       if (data.change24hr.startsWith('+')) {

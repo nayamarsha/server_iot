@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sistem Pemantauan Banjir Real-Time</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script defer src="js/script.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+     <header class="navbar-fixed">
+        <div class="container">
+            <div class="header-flex">
+                <div class="logo">
+                    <a href="#home">IOT FIK Kelas C</a>
+                </div>
+                <div class="menu-container">
+                    <button id="hamburger" class="hamburger-btn">
+                        <span class="hamburger-line top"></span>
+                        <span class="hamburger-line middle"></span>
+                        <span class="hamburger-line bottom"></span>
+                    </button>
+                    <nav id="nav-menu" class="nav-menu">
+                        <ul>
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#status">Status</a></li>
+                            <li><a href="#history">History</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+     </header>
+     <!-- End Navbar -->
+
+     <!-- Home -->
+      <section id="home" class="home">
+        <div class="container">
+            <div class="home-flex">
+                <div class="home-text">
+                    <h1>Sistem Pemantauan Banjir Real-Time</h1>
+                    <h2>Informatika Kelas C 2023 - UPN "Veteran" Jakarta</h2>
+                    <p>Website ini dirancang untuk memantau ketinggian air secara real time dan memberikan informasi kondisi lingkungan secara langsung. Pengguna dapat melihat status air yang diklasifikasikan berdasarkan tingkat keamanan, mulai dari aman hingga bahaya. Selain data terkini, tersedia juga riwayat pengukuran sebelumnya untuk membantu memahami tren perubahan permukaan air.</p>
+                    <a href="#status" class="btn-primary">Lihat Status</a>
+                </div>
+                <div class="home-image">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPfXGQWF2AhJOeYsGxHJRoz8w0akDflDCasg&s" alt="Sensor Ketinggian Air">
+                </div>
+            </div>
+        </div>
+      </section>
+      <!-- End Home -->
+
+      <!-- Status -->
+<section id="status" class="status-section">
+  <div class="container">
+    <div class="status-flex" style="display: flex; gap: 2rem; flex-wrap: wrap;">
+      <div class="status-text bitcoin-container" style="flex:1; min-width: 250px; text-align: center;">
+        <h1>Ketinggian Air</h1>
+        <div class="price" id="btcPrice">$----.--</div>
+        <div class="change" id="btcChange">--.--%</div>
+        <div class="timestamp">Last updated: <span id="lastUpdated">N/A</span></div>
+      </div>
+
+      <div class="status-text mqtt-container" style="flex:1; min-width: 250px; text-align: center;">
+        <img src="https://cdn-icons-png.flaticon.com/512/595/595067.png" alt="MQTT Icon" width="60" style="margin-bottom:15px;">
+        <h1>MQTT Connection</h1>
+        <div class="mqtt-status" id="mqttStatus">Connecting...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- History Section -->
+<section id="history" class="history-section" style="padding: 4rem 0; background: #f9fafb;">
+  <div class="container">
+    <h2 style="text-align:center; margin-bottom: 2rem; color: #2c3e50;">History Data</h2>
+    <div style="overflow-x:auto;">
+      <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+        <thead>
+          <tr style="background-color: #3b82f6; color: white; text-align: left;">
+            <th style="padding: 12px; border: 1px solid #ddd;">Timestamp</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Ketinggian Air</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Status</th>
+          </tr>
+        </thead>
+        <tbody id="historyTableBody">
+          <!-- Data dari database akan dimasukkan ke sini -->
+          <tr>
+            <td colspan="4" style="text-align:center; padding: 20px; color: #64748b;">Loading data...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+</body>
+</html>

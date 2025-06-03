@@ -57,12 +57,8 @@ client.on('message', function (topic, message) {
       }
     }
 
-    if (data.updated) {
-      const date = new Date(data.updated);
-      updatedElement.textContent = date.toLocaleString();
-    } else {
-      updatedElement.textContent = 'N/A';
-    }
+    const now = new Date();
+    updatedElement.textContent = now.toLocaleString();
   } catch (e) {
     console.error('Error parsing JSON payload:', e);
   }

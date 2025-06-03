@@ -1,8 +1,8 @@
 const brokerUrl = 'wss://k56e9d0e.ala.asia-southeast1.emqxsl.com:8084/mqtt';
 const username = 'dummy'; // Sesuaikan dengan EMQX kamu
 const password = 'iot';
-const topicToSubscribe = 'bitcoin/price/status';
-const webClientId = 'webClient_BitcoinTracker_' + Math.random().toString(16).substr(2, 8);
+const topicToSubscribe = 'banjir/level_air';
+const webClientId = 'IOT_BANJIR_TRACKER_WEB'
 
 const priceElement = document.getElementById('btcPrice');
 const changeElement = document.getElementById('btcChange');

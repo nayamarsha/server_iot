@@ -1,8 +1,12 @@
 const brokerUrl = 'wss://k56e9d0e.ala.asia-southeast1.emqxsl.com:8084/mqtt';
 const username = 'dummy'; // Sesuaikan dengan EMQX kamu
 const password = 'iot';
-const topicToSubscribe = 'bitcoin/price/status';
+const topicToSubscribe = 'sensors/data/31272817';
 const webClientId = 'webClient_BitcoinTracker_' + Math.random().toString(16).substr(2, 8);
+const mongoose = require('mongoose')
+const cors = require('cors');
+const express = require('express')
+const { Timestamp } = require('bson');
 
 const priceElement = document.getElementById('btcPrice');
 const changeElement = document.getElementById('btcChange');
@@ -15,7 +19,7 @@ if (serverStatusElement) {
 
 const options = {
   clientId: webClientId,
-  username: username,
+  username: emqx ,
   password: password,
   clean: true,
   connectTimeout: 5000,
@@ -24,6 +28,29 @@ const options = {
 
 console.log(`Attempting to connect to MQTT broker: ${brokerUrl}`);
 const client = mqtt.connect(brokerUrl, options);
+const mongodburl = 'mongodb+srv://aaaa:mongodbpw123@crud.atbxbz1.mongodb.net/?retryWrites=true&w=majority&appName=CRUD'
+
+const waterLevelSchema = new mongoose.Schema({
+  level: Number,
+  timestamp: {type: Date, default:Date.now()}
+})
+
+const waterLevel = mongoose.model('waterlevel', waterLevelSchema);
+
+const app = express()
+app.use(cors())
+app.use(express.json())
+app.use(express.static('public'))
+
+
+async function main(){
+  await mongoose.connect(mongodburl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
+
+  console.log('terhubung ke mongodb atlas')
+
 
 client.on('connect', function () {
   console.log('Connected to MQTT broker!');
@@ -46,13 +73,21 @@ client.on('connect', function () {
   });
 });
 
-client.on('message', function (topic, message) {
-  const messageString = message.toString();
+
+
+client.on('message', async (topic, message) {
+
   console.log(`Received message on topic ${topic}: ${messageString}`);
   try {
-    const data = JSON.parse(messageString);
-    if (priceElement && data.price && data.change24hr) { 
-      priceElement.textContent = '$' + data.price;
+    const messageString = message.toString();
+    const jsondata = JSON.parse(messageString);
+    const level = jsondata.level;
+
+    console.log(`data diterima - tppik: ${topic}, level: ${level}`)
+    const data = new waterLevel({level})
+    await data.save()
+    if (priceElement && data.ketinggian_air && data.change24hr) { 
+      priceElement.textContent = '$' + data.ketinggian_air;
       changeElement.textContent = data.change24hr;
 
       if (data.change24hr.startsWith('+')) {
@@ -105,3 +140,18 @@ client.on('offline', function () {
     serverStatusElement.style.color = 'red';
   }
 });
+// 4. Endpoint untuk ambil data
+app.get('/api/water-levels', async (req, res) => {
+  const data = await WaterLevel.find().sort({ timestamp: -1 }).limit(100);
+  res.json(data);
+});
+
+// 5. Jalankan server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server berjalan di http://localhost:${PORT}`);
+});
+}
+
+// Jalankan aplikasi
+main().catch((err) => console.error('Error utama:', err));

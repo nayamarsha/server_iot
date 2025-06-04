@@ -1,120 +1,133 @@
-const brokerUrl = 'wss://k56e9d0e.ala.asia-southeast1.emqxsl.com:8084/mqtt';
-const username = 'dummy'; // Sesuaikan dengan EMQX kamu
-const password = 'iot';
-const topicToSubscribe = 'bitcoin/price/status';
-const webClientId = 'webClient_BitcoinTracker_' + Math.random().toString(16).substr(2, 8);
+require('dotenv').config();
+const express = require("express");
+const mongoose = require("mongoose");
+const mqtt = require("mqtt"); 
+const app = express();
+app.use(express.json());
 
-const priceElement = document.getElementById('btcPrice');
-const changeElement = document.getElementById('btcChange');
-const updatedElement = document.getElementById('lastUpdated');
-const serverStatusElement = document.getElementById('ServerStatus');
+const url = process.env.MONGODB_URL;
 
-if (serverStatusElement) {
-  serverStatusElement.style.color = 'red';
-}
+const waterLevelSchema = new mongoose.Schema({
+  timestamp: { type: Date, default: () => new Date().toLocaleString("en-GB", { timeZone: "Asia/Jakarta" }) },
+  level: Number
+});
 
-const options = {
-  clientId: webClientId,
-  username: username,
-  password: password,
-  clean: true,
-  connectTimeout: 5000,
-  reconnectPeriod: 2000,
+const waterLevelModel = mongoose.model("waterLevel", waterLevelSchema);
+
+const connectWithRetry = () => {
+  console.log("Trying to connect to MongoDB...");
+  mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+      console.log("Connected to MongoDB");
+      startMqttClient(); 
+    })
+    .catch(err => {
+      console.error("MongoDB connection error:", err);
+      console.log("Retrying connection in 5 seconds...");
+      setTimeout(connectWithRetry, 5000);
+    });
 };
 
-console.log(`Attempting to connect to MQTT broker: ${brokerUrl}`);
-const client = mqtt.connect(brokerUrl, options);
+const startMqttClient = () => {
+  const brokerUrl = 'wss://k56e9d0e.ala.asia-southeast1.emqxsl.com:8084/mqtt';
+  const username = 'dummy';
+  const password = 'iot';
+  const topicToSubscribe = 'bitcoin/price/status';
+  const webClientId = 'webClient_BitcoinTracker_' + Math.random().toString(16).substr(2, 8);
 
-client.on('connect', function () {
-  console.log('Connected to MQTT broker!');
-  if (serverStatusElement) {
-    serverStatusElement.textContent = 'Connected';
-    serverStatusElement.style.color = 'green';
-  }
+  const options = {
+    clientId: webClientId,
+    username: username,
+    password: password,
+    clean: true,
+    connectTimeout: 5000,
+    reconnectPeriod: 2000,
+  };
 
-  client.subscribe(topicToSubscribe, function (err) {
-    if (!err) {
-      console.log(`Subscribed to topic: ${topicToSubscribe}`);
-    } else {
-      console.error('Subscription error:', err);
+  const client = mqtt.connect(brokerUrl, options);
 
-      if (serverStatusElement) {
-        serverStatusElement.textContent = 'Subscription Error'; // Example
-        serverStatusElement.style.color = 'red';
+  client.on('connect', function () {
+    console.log('Connected to MQTT broker!');
+    client.subscribe(topicToSubscribe, function (err) {
+      if (!err) {
+        console.log(`Subscribed to topic: ${topicToSubscribe}`);
+      } else {
+        console.error('Subscription error:', err);
       }
+    });
+  });
+
+  client.on('message', function (topic, message) {
+    const messageString = message.toString();
+    console.log(`Received message on topic ${topic}: ${messageString}`);
+    try {
+      const data = JSON.parse(messageString);
+      if (data.level) {
+        const waterLevelExample = new waterLevelModel({
+          level: data.level
+        });
+
+        waterLevelExample.save()
+          .then(() => {
+            console.log("Water level data saved");
+            //updateWaterLevelHistory(); 
+          })
+          .catch(err => console.error("Error saving data:", err));
+      } else {
+        console.log(`Received data does not conform to schema: ${messageString}`);
+      }
+    } catch (e) {
+      console.error('Error parsing JSON payload:', e);
     }
   });
-});
 
-client.on('message', function (topic, message) {
-  const messageString = message.toString();
-  console.log(`Received message on topic ${topic}: ${messageString}`);
-  try {
-    const data = JSON.parse(messageString);
-    if (priceElement && data.price && data.change24hr) { 
-      priceElement.textContent = '$' + data.price;
-      changeElement.textContent = data.change24hr;
+  // Other MQTT event handlers...
+};
 
-      if (data.change24hr.startsWith('+')) {
-        changeElement.className = 'change positive';
-      } else if (data.change24hr.startsWith('-')) {
-        changeElement.className = 'change negative';
-      } else {
-        changeElement.className = 'change';
-      }
-    }
+// const updateWaterLevelHistory = () => {
+//   // Fetch the latest water level data and update the HTML table
+//   waterLevelModel.find().sort({ timestamp: -1 }).limit(10).exec((err, data) => {
+//     if (err) {
+//       console.error("Error fetching water level history:", err);
+//       return;
+//     }
+//     const tableBody = document.getElementById('historyTableBody');
+//     tableBody.innerHTML = ''; // Clear existing rows
+//     data.forEach(entry => {
+//       const row = `<tr>
+//                      <td>${entry.timestamp.toLocaleString()}</td>
+//                      <td>${entry.level}</td>
+//                      <td>${entry.level > 5 ? 'Danger' : 'Safe'}</td>
+//                    </tr>`;
+//       tableBody.innerHTML += row; // Append new row
+//     });
+//   });
+// };
 
-    const now = new Date();
-    if (updatedElement) {
-        updatedElement.textContent = now.toLocaleString();
-    }
-  } catch (e) {
-    console.error('Error parsing JSON payload:', e);
+app.post('/data', (req, res) => {
+  const { level } = req.body;
+  if (level === " " || level < 0) {
+    return res.status(400).send({ error: 'Invalid request body' });
   }
-});
+  const waterLevelExample = new waterLevelModel({
+    level,
+    timestamp: new Date().toLocaleString("en-GB", { timeZone: "Asia/Jakarta" })
+  });
 
-client.on('error', function (err) {
-  console.error('MQTT Connection Error:', err);
-  
-  if (serverStatusElement) {
-    serverStatusElement.textContent = 'Connection Error';
-    serverStatusElement.style.color = 'red';
-  }
-});
-
-client.on('reconnect', function () {
-  console.log('Reconnecting to MQTT broker...');
-  if (serverStatusElement) {
-    serverStatusElement.textContent = 'Reconnecting...';
-    serverStatusElement.style.color = 'orange';
-  }
-});
-
-client.on('close', function () {
-  console.log('MQTT connection closed');
-  if (serverStatusElement) {
-    serverStatusElement.textContent = 'Disconnected';
-    serverStatusElement.style.color = 'red';
-  }
-});
-
-client.on('offline', function () {
-  console.log('MQTT client is offline');
-  if (serverStatusElement) {
-    serverStatusElement.textContent = 'Offline';
-    serverStatusElement.style.color = 'red';
-  }
-});
-
-// === HAMBURGER MENU TOGGLE ===
-document.addEventListener("DOMContentLoaded", function () {
-  const hamburger = document.getElementById('hamburger');
-  const navMenu = document.getElementById('nav-menu');
-
-  if (hamburger && navMenu) {
-    hamburger.addEventListener('click', function () {
-      hamburger.classList.toggle('active');
-      navMenu.classList.toggle('active');
+  waterLevelExample.save()
+    .then(() => {
+      console.log("Water level data saved");
+      //updateWaterLevelHistory(); // Update the history table
+      res.send({ message: 'Data saved successfully' });
+    })
+    .catch(err => {
+      console.error("Error saving data:", err);
+      res.status(500).send({ error: 'Error saving data' });
     });
-  }
+});
+
+connectWithRetry();
+
+app.listen(3000, () => {
+  console.log("Server is running on port 3000!!");
 });

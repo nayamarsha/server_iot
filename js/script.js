@@ -1,13 +1,17 @@
 const brokerUrl = 'wss://k56e9d0e.ala.asia-southeast1.emqxsl.com:8084/mqtt';
 const username = 'dummy'; // Sesuaikan dengan EMQX kamu
 const password = 'iot';
-const topicToSubscribe = 'banjir/level_air';
-const webClientId = 'IOT_BANJIR_TRACKER_WEB'
+const topicToSubscribe = 'bitcoin/price/status';
+const webClientId = 'webClient_BitcoinTracker_' + Math.random().toString(16).substr(2, 8);
 
-const levelAir = document.getElementById('btcPrice');
+const priceElement = document.getElementById('btcPrice');
 const changeElement = document.getElementById('btcChange');
 const updatedElement = document.getElementById('lastUpdated');
-const mqttStatusElement = document.getElementById('mqttStatus');
+const serverStatusElement = document.getElementById('ServerStatus');
+
+if (serverStatusElement) {
+  serverStatusElement.style.color = 'red';
+}
 
 const options = {
   clientId: webClientId,
@@ -21,20 +25,23 @@ const options = {
 console.log(`Attempting to connect to MQTT broker: ${brokerUrl}`);
 const client = mqtt.connect(brokerUrl, options);
 
-function updateMqttStatus(status, colorClass) {
-  mqttStatusElement.textContent = status;
-  mqttStatusElement.className = 'mqtt-status ' + colorClass;
-}
-
 client.on('connect', function () {
   console.log('Connected to MQTT broker!');
-  updateMqttStatus('Connected', 'connected');
+  if (serverStatusElement) {
+    serverStatusElement.textContent = 'Connected';
+    serverStatusElement.style.color = 'green';
+  }
+
   client.subscribe(topicToSubscribe, function (err) {
     if (!err) {
       console.log(`Subscribed to topic: ${topicToSubscribe}`);
     } else {
       console.error('Subscription error:', err);
-      updateMqttStatus('Subscription Error', 'disconnected');
+
+      if (serverStatusElement) {
+        serverStatusElement.textContent = 'Subscription Error'; // Example
+        serverStatusElement.style.color = 'red';
+      }
     }
   });
 });
@@ -44,8 +51,8 @@ client.on('message', function (topic, message) {
   console.log(`Received message on topic ${topic}: ${messageString}`);
   try {
     const data = JSON.parse(messageString);
-    if (data.price && data.change24hr) {
-      levelAir.textContent = data.price;
+    if (priceElement && data.price && data.change24hr) { 
+      priceElement.textContent = '$' + data.price;
       changeElement.textContent = data.change24hr;
 
       if (data.change24hr.startsWith('+')) {
@@ -58,7 +65,9 @@ client.on('message', function (topic, message) {
     }
 
     const now = new Date();
-    updatedElement.textContent = now.toLocaleString();
+    if (updatedElement) {
+        updatedElement.textContent = now.toLocaleString();
+    }
   } catch (e) {
     console.error('Error parsing JSON payload:', e);
   }
@@ -66,20 +75,33 @@ client.on('message', function (topic, message) {
 
 client.on('error', function (err) {
   console.error('MQTT Connection Error:', err);
-  updateMqttStatus(`Error: ${err.message.substring(0, 30)}`, 'disconnected');
+  
+  if (serverStatusElement) {
+    serverStatusElement.textContent = 'Connection Error';
+    serverStatusElement.style.color = 'red';
+  }
 });
 
 client.on('reconnect', function () {
   console.log('Reconnecting to MQTT broker...');
-  updateMqttStatus('Reconnecting...', 'reconnecting');
+  if (serverStatusElement) {
+    serverStatusElement.textContent = 'Reconnecting...';
+    serverStatusElement.style.color = 'orange';
+  }
 });
 
 client.on('close', function () {
   console.log('MQTT connection closed');
-  updateMqttStatus('Disconnected', 'disconnected');
+  if (serverStatusElement) {
+    serverStatusElement.textContent = 'Disconnected';
+    serverStatusElement.style.color = 'red';
+  }
 });
 
 client.on('offline', function () {
   console.log('MQTT client is offline');
-  updateMqttStatus('Offline', 'disconnected');
+  if (serverStatusElement) {
+    serverStatusElement.textContent = 'Offline';
+    serverStatusElement.style.color = 'red';
+  }
 });

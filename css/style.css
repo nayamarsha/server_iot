@@ -3,163 +3,174 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* Body */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
-               "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  background: #f9fafb;
+  color: #1f2937;
   line-height: 1.6;
-  background: #fff;
-  color: #333;
-  padding-top: 60px;
 }
 
 /* Container */
 .container {
-  width: 90%;
-  max-width: 1200px;
-  margin: auto;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
-/* Navbar */
+/* ===== Navbar ===== */
 .navbar-fixed {
   position: fixed;
   top: 0;
   width: 100%;
-  background: white;
-  z-index: 999;
+  background: #fff;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 1000;
 }
 
 .header-flex {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0;
-  height: 60px;
+  height: 70px;
 }
 
 .logo a {
-  font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
   color: #3b82f6;
   text-decoration: none;
-  line-height: 1;
 }
 
-.menu-container {
-  position: relative;
-}
-
-.hamburger-btn {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: none;
-  position: absolute;
-  right: 1rem;
-  top: 1rem;
-}
-
-.hamburger-line {
-  width: 25px;
-  height: 3px;
-  background: #333;
-  transition: all 0.3s ease;
-}
-
+/* Nav menu desktop: horizontal */
 .nav-menu {
   display: flex;
-  gap: 1rem;
+  flex-direction: row;
+  gap: 2rem;
+  position: static;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+  align-items: center;
 }
 
 .nav-menu ul {
-  list-style: none;
   display: flex;
+  list-style: none;
   gap: 2rem;
+  padding: 0;
+  margin: 0;
 }
 
-.nav-menu a {
+.nav-menu ul li {
+  margin: 0;
+}
+
+.nav-menu ul li a {
+  font-weight: 500;
+  color: #1f2937;
   text-decoration: none;
-  color: #333;
-  font-size: 0.9rem;
-  line-height: 1;
-  transition: color 0.3s;
+  transition: color 0.3s ease;
 }
 
-.nav-menu a:hover {
+.nav-menu ul li a:hover {
   color: #3b82f6;
+}
+
+/* Hamburger button - hidden desktop */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1100;
+}
+
+.hamburger-line {
+  width: 30px;
+  height: 3px;
+  background-color: #1f2937;
+  border-radius: 3px;
+  transition: all 0.3s ease;
 }
 
 /* Home Section */
 .home {
-  padding: 4rem 0;
+  padding: 120px 0 60px; /* kasih padding atas supaya tidak tertutup navbar */
+  background: #fff;
 }
 
 .home-flex {
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  gap: 2rem;
   flex-wrap: wrap;
 }
 
-
 .home-text {
   flex: 1;
-  padding: 1rem;
-  text-align: center;
+  min-width: 280px;
+  text-align: left;
 }
 
 .home-text h1 {
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
   color: #3b82f6;
 }
 
 .home-text h2 {
-  color: #64748b;
-  margin: 1rem 0;
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  color: #4b5563;
 }
 
 .home-text p {
-  color: #94a3b8;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  color: #717378;
+  line-height: 1.5;
+  text-align: justify;
 }
 
 .btn-primary {
-  background: #3b82f6;
+  display: inline-block;
+  background-color: #3b82f6;
   color: white;
-  padding: 0.75rem 2rem;
-  border-radius: 999px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border-radius: 30px;
   text-decoration: none;
-  transition: 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .btn-primary:hover {
-  opacity: 0.8;
+  background-color: #2563eb;
 }
 
-/* Home Image */
 .home-image {
   flex: 1;
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
+  min-width: 280px;
+  text-align: center;
 }
 
 .home-image img {
-  width: 320px;
-  height: 320px;
-  object-fit: cover;
-  border-radius: 50%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.25);
 }
 
 /* Status Section */
 .status-section {
-  padding: 3rem 0;
+  padding: 4rem 0;
+  background: #f9fafb;
 }
 
 .status-flex {
@@ -170,127 +181,105 @@ body {
 }
 
 .status-text {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   flex: 1;
   min-width: 250px;
-  max-width: 400px;
-  background-color: #ffffff;
-  padding: 20px 30px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
   text-align: center;
 }
 
 .status-text h1 {
-  color: #ff9900;
-  margin-bottom: 10px;
-  font-size: 1.8em;
-}
-
-.status-text img {
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #1e40af;
 }
 
 .price {
-  font-size: 2.8em;
-  font-weight: bold;
-  color: #2c3e50;
-  margin: 10px 0;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
 .change {
-  font-size: 1.2em;
-  margin: 5px 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 .change.positive {
-  color: #27ae60;
+  color: #16a34a; /* hijau */
 }
 
 .change.negative {
-  color: #c0392b;
+  color: #dc2626; /* merah */
 }
 
 .timestamp {
-  font-size: 0.8em;
-  color: #7f8c8d;
-  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #6b7280;
 }
 
-/* MQTT Status */
-.mqtt-status {
-  padding: 15px 20px;
-  font-size: 1.2em;
-  font-weight: 600;
-  border-radius: 12px;
-  color: white;
-  background-color: #7f8c8d;
-  user-select: none;
-  transition: background-color 0.3s ease;
-}
-
-.mqtt-status.connected {
-  background-color: #27ae60;
-}
-
-.mqtt-status.disconnected {
-  background-color: #c0392b;
-}
-
-.mqtt-status.reconnecting {
-  background-color: #f39c12;
-}
-
-/* History Section */
+/* History Sections */
 .history-section {
   padding: 4rem 0;
-  background: #f9fafb;
 }
 
 .history-section h2 {
-  text-align: center;
+  font-size: 1.75rem;
   margin-bottom: 2rem;
-  color: #2c3e50;
+  color: #1e293b;
 }
 
-.history-section table {
+/* Table styling */
+table {
   width: 100%;
   border-collapse: collapse;
   min-width: 600px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.history-section th,
-.history-section td {
-  padding: 12px;
-  border: 1px solid #ddd;
+thead tr {
+  background-color: #3b82f6;
+  color: white;
   text-align: left;
 }
 
-.history-section th {
-  background-color: #3b82f6;
-  color: white;
-  text-transform: uppercase;
+thead tr th {
+  padding: 12px;
+  border: 1px solid #ddd;
 }
 
-.history-section tr:hover {
-  background-color: #eef2ff;
+tbody tr td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  color: #374151;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .status-flex {
+/* Responsive adjustments */
+@media (max-width: 767px) {
+
+  /* Navbar */
+  .nav-menu {
+    display: none; /* sembunyikan default */
     flex-direction: column;
-    align-items: center;
+    gap: 1rem;
+    background-color: #fff;
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    z-index: 999;
   }
 
-  .status-text {
-    max-width: 90%;
-  }
-
-  .header-flex {
-    height: auto;
-    padding: 0.5rem 1rem;
-    flex-direction: column;
+  .nav-menu.active {
+    display: flex;
   }
 
   .nav-menu ul {
@@ -298,17 +287,37 @@ body {
     gap: 1rem;
   }
 
-  .nav-menu {
-    flex-direction: column;
-    align-items: flex-start;
+  .hamburger-btn {
+    display: flex;
   }
 
-    .home-flex {
+  /* Home */
+  .home-flex {
     flex-direction: column;
-    text-align: center;
   }
 
   .home-text, .home-image {
-    width: 100%;
+    min-width: 100%;
+    text-align: center;
+  }
+
+  .btn-primary {
+    padding: 0.75rem 2rem;
+  }
+
+  /* Tables */
+  table {
+    min-width: 100%;
+  }
+
+  .status-flex {
+    flex-direction: column;
+    align-items: center; 
+  }
+
+  .status-text {
+    width: 100%; 
+    max-width: 400px; 
+    margin-bottom: 1.5rem; 
   }
 }

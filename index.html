@@ -51,7 +51,7 @@
   <div class="container">
     <div class="status-flex" style="display: flex; gap: 2rem; flex-wrap: wrap;">
       <div class="status-text bitcoin-container" style="flex:1; min-width: 250px; text-align: center;">
-        <h1>Ketinggian Air</h1>
+        <h1>Water Level</h1>
         <div class="price" id="btcPrice">$----.--</div>
         <div class="change" id="btcChange">--.--%</div>
         <div class="timestamp">Last updated: <span id="lastUpdated">N/A</span></div>
@@ -62,11 +62,14 @@
         <img src="https://cdn-icons-png.flaticon.com/512/595/595067.png" alt="MQTT Icon" width="60" style="margin-bottom:15px;">
         <h1>Water Level</h1>
       </div>
+<div class="status-battery status-text" style="flex:1; min-width: 250px; text-align: center;">
+  <h1>Battery Status</h1>
+</div>
     </div>
   </div>
 </section>
 
-<section id="history" class="history-section" style="padding: 4rem 0; background: #f9fafb;">
+<section id="history" class="history-section" style="padding: 4rem 0; background: #fff;">
   <div class="container">
     <h2 style="text-align:center; margin-bottom: 2rem; color: #2c3e50;">Water Level History Data</h2>
     
@@ -102,37 +105,12 @@
     <div style="overflow-x:auto;">
       <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
         <thead>
-          <tr style="background-color: #22c55e; color: white; text-align: left;"> <th style="padding: 12px; border: 1px solid #ddd;">Timestamp</th>
+          <tr style="background-color: #3b82f6; color: white; text-align: left;"> <th style="padding: 12px; border: 1px solid #ddd;">Timestamp</th>
             <th style="padding: 12px; border: 1px solid #ddd;">Kelembapan</th>
             <th style="padding: 12px; border: 1px solid #ddd;">Status</th>
           </tr>
         </thead>
         <tbody id="humidityHistoryTableBody"> <tr>
-            <td colspan="3" style="text-align:center; padding: 20px; color: #64748b;">Loading data...</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<section id="historytemp" class="history-section" style="padding: 4rem 0; background: #f9fafb;">
-  <div class="container">
-    <h2 style="text-align:center; margin-bottom: 2rem; color: #2c3e50;">Temperature History Data</h2>
-
-    <div id="temperatureChartContainer" style="width: 100%; max-width: 800px; height: 400px; margin: 0 auto 2rem auto; border: 1px solid #ddd; background: #fff; padding: 10px; box-sizing: border-box;">
-        <p style="text-align:center; padding-top: 20px; color: #64748b;">Temperature Graph Loading...</p>
-        </div>
-
-    <div style="overflow-x:auto;">
-      <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
-        <thead>
-          <tr style="background-color: #ef4444; color: white; text-align: left;"> <th style="padding: 12px; border: 1px solid #ddd;">Timestamp</th>
-            <th style="padding: 12px; border: 1px solid #ddd;">Temp</th>
-            <th style="padding: 12px; border: 1px solid #ddd;">Status</th>
-          </tr>
-        </thead>
-        <tbody id="temperatureHistoryTableBody"> <tr>
             <td colspan="3" style="text-align:center; padding: 20px; color: #64748b;">Loading data...</td>
           </tr>
         </tbody>

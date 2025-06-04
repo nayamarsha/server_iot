@@ -9,8 +9,7 @@
     <script defer src="js/script.js"></script>
 </head>
 <body>
-    <!-- Navbar -->
-     <header class="navbar-fixed">
+    <header class="navbar-fixed">
         <div class="container">
             <div class="header-flex">
                 <div class="logo">
@@ -33,10 +32,7 @@
             </div>
         </div>
      </header>
-     <!-- End Navbar -->
-
-     <!-- Home -->
-      <section id="home" class="home">
+     <section id="home" class="home">
         <div class="container">
             <div class="home-flex">
                 <div class="home-text">
@@ -51,10 +47,7 @@
             </div>
         </div>
       </section>
-      <!-- End Home -->
-
-      <!-- Status -->
-<section id="status" class="status-section">
+      <section id="status" class="status-section">
   <div class="container">
     <div class="status-flex" style="display: flex; gap: 2rem; flex-wrap: wrap;">
       <div class="status-text bitcoin-container" style="flex:1; min-width: 250px; text-align: center;">
@@ -73,10 +66,14 @@
   </div>
 </section>
 
-<!-- History Section -->
 <section id="history" class="history-section" style="padding: 4rem 0; background: #f9fafb;">
   <div class="container">
-    <h2 style="text-align:center; margin-bottom: 2rem; color: #2c3e50;">History Data</h2>
+    <h2 style="text-align:center; margin-bottom: 2rem; color: #2c3e50;">Water Level History Data</h2>
+    
+    <div id="waterLevelChartContainer" style="width: 100%; max-width: 800px; height: 400px; margin: 0 auto 2rem auto; border: 1px solid #ddd; background: #fff; padding: 10px; box-sizing: border-box;">
+        <p style="text-align:center; padding-top: 20px; color: #64748b;">Water Level Graph Loading...</p>
+        </div>
+
     <div style="overflow-x:auto;">
       <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
         <thead>
@@ -86,10 +83,8 @@
             <th style="padding: 12px; border: 1px solid #ddd;">Status</th>
           </tr>
         </thead>
-        <tbody id="historyTableBody">
-          <!-- Data dari database akan dimasukkan ke sini -->
-          <tr>
-            <td colspan="4" style="text-align:center; padding: 20px; color: #64748b;">Loading data...</td>
+        <tbody id="waterLevelHistoryTableBody"> <tr>
+            <td colspan="3" style="text-align:center; padding: 20px; color: #64748b;">Loading data...</td>
           </tr>
         </tbody>
       </table>
@@ -97,6 +92,54 @@
   </div>
 </section>
 
+<section id="historyhumidity" class="history-section" style="padding: 4rem 0; background: #f0f4f8;"> <div class="container">
+    <h2 style="text-align:center; margin-bottom: 2rem; color: #2c3e50;">Humidity History Data</h2>
 
-</body>
+    <div id="humidityChartContainer" style="width: 100%; max-width: 800px; height: 400px; margin: 0 auto 2rem auto; border: 1px solid #ddd; background: #fff; padding: 10px; box-sizing: border-box;">
+        <p style="text-align:center; padding-top: 20px; color: #64748b;">Humidity Graph Loading...</p>
+        </div>
+
+    <div style="overflow-x:auto;">
+      <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+        <thead>
+          <tr style="background-color: #22c55e; color: white; text-align: left;"> <th style="padding: 12px; border: 1px solid #ddd;">Timestamp</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Kelembapan</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Status</th>
+          </tr>
+        </thead>
+        <tbody id="humidityHistoryTableBody"> <tr>
+            <td colspan="3" style="text-align:center; padding: 20px; color: #64748b;">Loading data...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="historytemp" class="history-section" style="padding: 4rem 0; background: #f9fafb;">
+  <div class="container">
+    <h2 style="text-align:center; margin-bottom: 2rem; color: #2c3e50;">Temperature History Data</h2>
+
+    <div id="temperatureChartContainer" style="width: 100%; max-width: 800px; height: 400px; margin: 0 auto 2rem auto; border: 1px solid #ddd; background: #fff; padding: 10px; box-sizing: border-box;">
+        <p style="text-align:center; padding-top: 20px; color: #64748b;">Temperature Graph Loading...</p>
+        </div>
+
+    <div style="overflow-x:auto;">
+      <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+        <thead>
+          <tr style="background-color: #ef4444; color: white; text-align: left;"> <th style="padding: 12px; border: 1px solid #ddd;">Timestamp</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Temp</th>
+            <th style="padding: 12px; border: 1px solid #ddd;">Status</th>
+          </tr>
+        </thead>
+        <tbody id="temperatureHistoryTableBody"> <tr>
+            <td colspan="3" style="text-align:center; padding: 20px; color: #64748b;">Loading data...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+    </body>
 </html>
